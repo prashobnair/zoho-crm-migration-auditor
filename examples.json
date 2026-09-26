@@ -1,0 +1,14 @@
+{
+  "organizations": [{"id":"o-1","name":"Fictional Northstar Bakery"}],
+  "people": [
+    {"id":"p-1","organization_id":"o-1","email":"alex@example.invalid","name":"Alex Demo"},
+    {"id":"p-2","organization_id":"o-1","email":" ALEX@example.invalid ","name":"Alex Dup"},
+    {"id":"p-3","organization_id":"o-missing","email":"jo@example.invalid","name":"Jo Demo"}
+  ],
+  "deals": [
+    {"id":"d-1","person_id":"p-1","stage":"qualified","value":1200},
+    {"id":"d-2","person_id":"p-9","stage":"mystery","value":500}
+  ],
+  "activities": [{"id":"a-1","deal_id":"d-1","summary":"Fictional call"}],
+  "stage_mapping": {"qualified":"Qualification"}
+}
