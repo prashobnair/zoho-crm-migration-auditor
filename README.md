@@ -1,27 +1,33 @@
-# Zoho CRM Migration Auditor
+# zoho-crm-migration-auditor (moved)
 
-An offline, **dry-run** portfolio example for evaluating a fictional CRM migration before any import. It maps an example deal stage, checks foreign-key relationships and duplicate email candidates, and produces a review report and rollback checklist. It does **not** connect to Zoho, migrate real data, merge contacts, or promise a one-click rollback.
+This project moved to [zoho-implementation-toolkit](https://github.com/prashobnair/zoho-implementation-toolkit) as the `migration` module. Its full commit history was preserved there.
 
-## Contract use-case
+It audits a CRM migration export before import — duplicates, orphans, and unmapped stages surface while they are still cheap to fix.
 
-A [Pipedrive-to-Zoho migration brief](https://www.freelancer.com/projects/sales-management/pipedrive-zoho-crm-migration) calls for contacts, deals, activities, custom fields and stages, a test import, validation and fallback. A [Zoho CRM setup/cleanup brief](https://www.freelancer.com/projects/zoho-crm/zoho-crm-setup-cleanup) adds deduplication and layout/workflow concerns. These were research examples, not live client engagements. This repo covers the *preflight and reconciliation* slice, not layouts or production workflows.
-
-## Run
-
-Python 3.10+ and standard library only. Clone or download the repository, then from its root:
+## Use it now
 
 ```sh
-python3 cli.py examples.json
-python3 cli.py examples.json --strict  # exit code 2 if not ready
-python3 -m unittest discover -p 'test_*.py' -v
+pip install https://github.com/prashobnair/zoho-implementation-toolkit/releases/download/v0.1.0/zohokit-0.1.0-py3-none-any.whl
 ```
 
-The fixture is entirely fictional and deliberately bad: an email duplicate, an orphan organization, an orphan deal-person relationship and an unmapped stage. The report should show `ready_for_import: false`, four issues, source counts of 1 organization, 3 people, 2 deals and 1 activity, and `target_preview_counts: null`. Edit a copy of the fixture to remove the second and third people and second deal to see a clean pass. No Zoho trial, API key, network, Docker or paid service is needed.
+or
 
-## Input and outputs
+```sh
+uv tool install git+https://github.com/prashobnair/zoho-implementation-toolkit@v0.1.0
+```
 
-Four lists, `organizations`, `people`, `deals`, `activities`, contain records with unique `id`s. People refer to `organization_id`, deals to `person_id`, activities to `deal_id`. `stage_mapping` explicitly maps source stage names to target labels. This is a **fictional intermediate schema**, not a statement of Zoho or Pipedrive API field names. Email is normalized with trimming and casefolding for duplicate candidates only. Duplicate candidates require human review; no automatic merge is safe. For this demo any error or review issue blocks readiness. Output has stable issue codes, counts, dependency order and source-ID inventory to assist a pilot rollback plan. It never writes a target record.
+The old `python cli.py examples.json [--strict]` is now:
 
-## Real deployment boundary
+```sh
+zohokit migration audit source.json [--strict]
+```
 
-A real implementation would first confirm the tenant's current Zoho CRM API module/field metadata, permissions, limits and data region; use a sandbox, map every custom field, retain activity/note history, handle pagination and rate limits, perform a small test import, reconcile source-to-target IDs and totals, then approve cutover and a tested inverse plan. The rollback manifest here is **not** an executable deletion plan: source IDs are not target IDs, and deletion could remove unrelated changes. Never import client records into this repository. See `DESIGN.md` for mapping, test and operator decisions.
+`--strict` exits 2 when the export is not ready for import. Reports render with `--format json|table|markdown|html` and `--out`.
+
+## Links
+
+- Module guide: https://prashobnair.github.io/zoho-implementation-toolkit/modules/migration/
+- What changed versus this repo: https://prashobnair.github.io/zoho-implementation-toolkit/legacy-parity/
+- Source: https://github.com/prashobnair/zoho-implementation-toolkit/tree/main/src/zohokit/modules/migration
+
+This repository is archived and read-only.
